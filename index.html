@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOMゼロイチラボ｜副業と“増やす仕組み”をデザインする</title>
+<style>
+  /* :rootはCSS変数を定義し、色を一括管理できるようにします */
+  :root {
+    --color-primary: #2563eb; /* メインの青 */
+    --color-primary-dark: #1d4ed8; /* メインの青 (ホバー) */
+    --color-primary-light: #eff6ff; /* 薄い青 (背景) */
+    --color-primary-border: #dbeafe; /* 薄い青 (境界線) */
+    --color-accent: #f97316; /* アクセントのオレンジ */
+    --color-accent-dark: #ea580c; /* アクセントのオレンジ (ホバー) */
+    --color-text-main: #1f2937; /* メインテキスト */
+    --color-text-sub: #4b5563; /* サブテキスト */
+    --color-border: #e5e7eb; /* 境界線 */
+    --color-bg-light: #f9fafb; /* 薄い背景 */
+    --color-bg-white: #ffffff;
+    --color-danger: #ef4444; /* 悩みアイコン用 */
+  }
+
+  .tom-lp {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    line-height: 1.6;
+    color: var(--color-text-main);
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+    background-color: #f4f4f5; /* 背景を白から少しだけ色付け */
+  }
+
+  .tom-lp * {
+    box-sizing: border-box;
+  }
+
+  .tom-lp h1,
+  .tom-lp h2,
+  .tom-lp h3 {
+    line-height: 1.3;
+    margin: 0 0 12px;
+  }
+
+  .tom-lp p {
+    margin: 0 0 10px;
+  }
+
+  /* --- ヒーローセクション --- */
+  .tom-lp .hero {
+    text-align: center;
+    padding: 32px 16px 28px;
+    border-radius: 16px;
+    /* メインカラーの薄いグラデーションに変更 */
+    background: linear-gradient(135deg, #f5f7ff 0%, #eef2ff 100%);
+    margin-bottom: 32px;
+    border: 1px solid var(--color-primary-border);
+    overflow: hidden; /* 背景の図形用 */
+    position: relative;
+  }
+  
+  /* ヒーローの背景にアクセント図形を追加 */
+  .tom-lp .hero::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 150px;
+    height: 150px;
+    background: var(--color-primary);
+    opacity: 0.05;
+    border-radius: 45%;
+    transform: rotate(30deg);
+  }
+  .tom-lp .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    right: -40px;
+    width: 200px;
+    height: 200px;
+    background: var(--color-accent);
+    opacity: 0.08;
+    border-radius: 50%;
+  }
+
+  .tom-lp .hero-title-main {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    position: relative; /* 図形より手前に表示 */
+    z-index: 1;
+  }
+
+  .tom-lp .hero-title-sub {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--color-primary); /* サブタイトルを色付け */
+    position: relative;
+    z-index: 1;
+  }
+
+  .tom-lp .hero-copy {
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tom-lp .hero-note {
+    font-size: 0.85rem;
+    color: var(--color-text-sub);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tom-lp .btn-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* 少し広げる */
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tom-lp .btn-primary,
+  .tom-lp .btn-outline {
+    display: inline-block;
+    padding: 12px 20px; /* 少し大きく */
+    border-radius: 999px;
+    font-size: 0.95rem; /* 少し大きく */
+    font-weight: 700; /* 強調 */
+    text-decoration: none;
+    transition: all 0.2s ease;
+    text-align: center;
+    min-width: 240px; /* 幅を統一 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  /* プライマリボタンをアクセントカラーに変更 */
+  .tom-lp .btn-primary {
+    background: var(--color-accent);
+    color: #fff;
+    border: 1px solid var(--color-accent);
+  }
+
+  .tom-lp .btn-primary:hover {
+    background: var(--color-accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  /* アウトラインボタンはメインカラーを使用 */
+  .tom-lp .btn-outline {
+    background: var(--color-bg-white);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-border);
+  }
+
+  .tom-lp .btn-outline:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+  }
+
+  /* --- 共通セクションスタイル --- */
+  .tom-lp section {
+    margin-bottom: 32px;
+    padding: 24px 20px; /* 少しパディングを増やす */
+    border-radius: 12px;
+    background: var(--color-bg-white);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  }
+
+  .tom-lp .section-title {
+    font-size: 1.25rem; /* 少し大きく */
+    font-weight: 700;
+    margin-bottom: 16px; /* 少し広げる */
+    border-left: 4px solid var(--color-primary);
+    padding-left: 10px; /* 少し広げる */
+  }
+
+  .tom-lp ul {
+    margin: 8px 0 0 0; /* 左の余白をリセット */
+    padding-left: 0;
+    font-size: 0.92rem;
+    list-style-type: none; /* デフォルトの点を削除 */
+  }
+
+  .tom-lp li {
+    margin-bottom: 8px; /* 少し広げる */
+  }
+  
+  /* --- ハイライト（強調）テキスト --- */
+  .tom-lp .highlight {
+    font-weight: 700;
+    /* アクセントカラーに変更 */
+    color: var(--color-accent-dark);
+    /* 下線マーカー風 */
+    background: linear-gradient(transparent 60%, #fed7aa 60%);
+    padding: 0 2px;
+  }
+  .tom-lp .highlight-blue {
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    background: linear-gradient(transparent 60%, #dbeafe 60%);
+    padding: 0 2px;
+  }
+
+
+  /* --- 悩みセクション (アイコン追加) --- */
+  .tom-lp #problems li {
+    position: relative;
+    padding-left: 28px; /* アイコン分のスペース */
+    font-weight: 500;
+    color: var(--color-text-sub);
+  }
+
+  .tom-lp #problems li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    /* SVGアイコンをマスクとして使用 */
+    background-color: var(--color-danger);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+  }
+
+  /* --- 主催者紹介セクション (新設) --- */
+  .tom-lp .profile-box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .tom-lp .profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto; /* スマホでは中央 */
+    object-fit: cover;
+    border: 4px solid var(--color-bg-white);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .tom-lp .profile-body {
+    flex: 1;
+  }
+  .tom-lp .profile-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center; /* スマホでは中央 */
+  }
+  .tom-lp .profile-name span {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-sub);
+    margin-left: 4px;
+  }
+  .tom-lp .profile-text {
+    font-size: 0.92rem;
+    margin-top: 8px;
+  }
+
+  /* --- 参加メリット (3カラム) --- */
+  .tom-lp .three-columns {
+    display: grid;
+    gap: 16px; /* 少し広げる */
+  }
+
+  .tom-lp .card {
+    padding: 16px 16px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-light);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+  .tom-lp .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
+  
+  .tom-lp .card-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+  }
+
+  .tom-lp .card-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 1rem; /* 少し大きく */
+    color: var(--color-primary-dark);
+  }
+
+  /* --- コンテンツ (レイアウト変更) --- */
+  .tom-lp .content-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .tom-lp .content-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--color-bg-light);
+    border: 1px solid var(--color-border);
+  }
+  .tom-lp .content-card-icon {
+    width: 32px;
+    height: 32px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tom-lp .content-card-body {
+    flex: 1;
+  }
+  .tom-lp .content-card-title {
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .tom-lp .content-card-text {
+    font-size: 0.88rem;
+    color: var(--color-text-sub);
+    margin: 0;
+  }
+  
+  /* --- 参加ステップ --- */
+  .tom-lp .steps {
+    counter-reset: step;
+    font-size: 0.92rem;
+    position: relative;
+    padding-left: 15px;
+  }
+  /* ステップをつなぐ縦線 */
+  .tom-lp .steps::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: var(--color-primary-border);
+  }
+  
+  .tom-lp .step-item {
+    margin-bottom: 16px; /* 少し広げる */
+    padding-left: 50px; /* ラベル分広げる */
+    position: relative;
+    min-height: 28px; /* ラベルの高さ確保 */
+  }
+  .tom-lp .step-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .tom-lp .step-item::before {
+    counter-increment: step;
+    content: "STEP " counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px; /* 少し調整 */
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: #fff;
+    z-index: 1; /* 縦線より手前 */
+  }
+  .tom-lp .step-item .highlight {
+      background: none; /* ここではマーカー不要 */
+      color: var(--color-text-main);
+      font-size: 1rem; /* 少し大きく */
+  }
+  .tom-lp .step-item p {
+      margin: 2px 0 0;
+      color: var(--color-text-sub);
+  }
+  
+  /* --- 参加者の声セクション (新設) --- */
+  .tom-lp .voice-grid {
+    display: grid;
+    gap: 16px;
+  }
+  .tom-lp .voice-card {
+    background: var(--color-bg-light);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .tom-lp .voice-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .tom-lp .voice-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ccc; /* ダミー画像 */
+  }
+  .tom-lp .voice-name {
+    font-weight: 700;
+  }
+  .tom-lp .voice-name span {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-sub);
+  }
+  .tom-lp .voice-text {
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.7;
+  }
+  .tom-lp .voice-text::before {
+    content: '「';
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+  .tom-lp .voice-text::after {
+    content: '」';
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+  
+  /* --- 対象者 --- */
+  .tom-lp #who li {
+    position: relative;
+    padding-left: 28px;
+    font-weight: 500;
+  }
+  .tom-lp #who li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-primary);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z' /%3E%3C/svg%3E");
+    mask-size: contain;
+  }
+
+  /* --- プラン --- */
+  .tom-lp .plan-list {
+    display: grid;
+    gap: 16px; /* 広げる */
+    font-size: 0.92rem;
+  }
+
+  .tom-lp .plan-card {
+    padding: 16px;
+    border-radius: 10px;
+    border: 2px solid var(--color-primary-border); /* 境界線を明確に */
+    background: var(--color-primary-light);
+    position: relative;
+    overflow: hidden; /* バッジ用 */
+  }
+  
+  /* スタンダードプランを強調 */
+  .tom-lp .plan-card.recommended {
+    border-color: var(--color-primary);
+    background: var(--color-bg-white);
+  }
+  
+  /* 「一番人気」バッジ */
+  .tom-lp .plan-card.recommended::before {
+    content: '一番人気';
+    position: absolute;
+    top: 10px;
+    right: -30px;
+    background: var(--color-accent);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 30px;
+    transform: rotate(45deg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .tom-lp .plan-name {
+    font-weight: 700;
+    font-size: 1.1rem; /* 少し大きく */
+    margin-bottom: 4px;
+    color: var(--color-primary-dark);
+  }
+
+  .tom-lp .plan-price {
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 12px; /* 少し広げる */
+    font-size: 1.1rem;
+  }
+  .tom-lp .plan-price span {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .tom-lp .plan-card ul {
+      margin-top: 10px;
+  }
+  .tom-lp .plan-card li {
+    padding-left: 22px;
+    position: relative;
+    font-size: 0.9rem;
+    color: var(--color-text-sub);
+  }
+  /* プラン内容のチェックマーク */
+  .tom-lp .plan-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    background-color: var(--color-primary);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z' clip-rule='evenodd' /%3E%3C/svg%3E");
+    mask-size: contain;
+  }
+
+  /* --- FAQ (アコーディオン化) --- */
+  .tom-lp .faq-item {
+    font-size: 0.92rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .tom-lp .faq-item:last-child {
+    border-bottom: none;
+  }
+  
+  .tom-lp .faq-q {
+    font-weight: 600;
+    margin: 0;
+    padding: 16px 0;
+    cursor: pointer;
+    position: relative;
+    padding-right: 30px; /* アイコン分 */
+  }
+  .tom-lp .faq-q::before {
+    content: 'Q.';
+    color: var(--color-primary);
+    margin-right: 8px;
+    font-size: 1.1rem;
+  }
+  /* アコーディオンの矢印アイコン */
+  .tom-lp .faq-q::after {
+    content: '';
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-text-sub);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E");
+    mask-size: contain;
+    transition: transform 0.2s ease;
+  }
+  /* 開いたときの矢印 */
+  .tom-lp .faq-item[open] .faq-q::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  .tom-lp .faq-a {
+    padding: 0 16px 16px;
+    color: var(--color-text-sub);
+    line-height: 1.7;
+    background: var(--color-bg-light);
+    border-radius: 0 0 8px 8px;
+    margin: 0 0 10px; /* detailsのデフォルトマージンを調整 */
+  }
+  .tom-lp .faq-a::before {
+    content: 'A.';
+    color: var(--color-accent-dark);
+    margin-right: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  
+  /* detailsタグのデフォルト矢印を消す */
+  .tom-lp .faq-q::-webkit-details-marker {
+    display: none;
+  }
+  .tom-lp .faq-q {
+    list-style: none;
+  }
+
+
+  /* --- フッターCTA (デザイン変更) --- */
+  .tom-lp .footer-cta {
+    text-align: center;
+    margin-top: 24px;
+    /* 背景色をメインカラーに変更 */
+    background: var(--color-primary);
+    color: var(--color-bg-white);
+    padding: 32px 20px; /* パディング追加 */
+  }
+
+  .tom-lp .footer-copy-main {
+    font-weight: 700;
+    margin-bottom: 8px; /* 少し広げる */
+    font-size: 1.1rem; /* 少し大きく */
+  }
+
+  .tom-lp .footer-copy-sub {
+    font-size: 0.9rem;
+    margin-bottom: 20px; /* 少し広げる */
+    opacity: 0.9; /* 少し透明度 */
+  }
+  
+  /* フッター内のボタンを再調整 */
+  .tom-lp .footer-cta .btn-primary {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  .tom-lp .footer-cta .btn-primary:hover {
+    background: var(--color-accent-dark);
+  }
+  .tom-lp .footer-cta .btn-outline {
+    background: var(--color-bg-white);
+    color: var(--color-primary);
+    border-color: var(--color-bg-white);
+  }
+  .tom-lp .footer-cta .btn-outline:hover {
+    background: var(--color-primary-light);
+    border-color: var(--color-primary-light);
+  }
+
+
+  /* --- メディアクエリ (PC表示) --- */
+  @media (min-width: 768px) {
+    .tom-lp {
+      padding: 32px 0 64px;
+    }
+
+    .tom-lp .hero-title-main {
+      font-size: 1.9rem;
+    }
+
+    .tom-lp .hero-title-sub {
+      font-size: 1.2rem;
+    }
+    
+    .tom-lp .btn-area {
+      gap: 12px;
+    }
+
+    /* プロフィールを横並びに */
+    .tom-lp .profile-box {
+      flex-direction: row;
+      align-items: center;
+    }
+    .tom-lp .profile-img {
+      margin: 0;
+    }
+    .tom-lp .profile-name {
+      text-align: left;
+    }
+
+    .tom-lp .three-columns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    
+    /* コンテンツを2カラムに */
+    .tom-lp .content-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    /* 参加者の声を2カラムに */
+    .tom-lp .voice-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tom-lp .plan-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="tom-lp">
+
+  <section class="hero" id="top">
+    <div class="hero-title-main">副業と“増やす仕組み”をデザインするオンラインラボ</div>
+    <div class="hero-title-sub">TOMゼロイチラボ</div>
+
+    <p class="hero-copy">
+      「なにから始めたらいいか分からない…」<br>
+      「一瞬だけ稼げても、続かない…」
+    </p>
+    <p class="hero-note">
+      そんな“副業迷子”から抜け出して、<br>
+      <span class="highlight">仕組みで増え続ける収入の土台</span>を一緒に作るコミュニティです。
+    </p>
+
+    <div class="btn-area" id="cta-top">
+      <a href="https://example.com/line" class="btn-primary" target="_blank" rel="noopener">無料オープンチャットに参加する</a>
+      <a href="https://example.com/line" class="btn-outline" target="_blank" rel="noopener">ラボの案内をLINEで受け取る</a>
+    </div>
+  </section>
+
+  <section id="problems">
+    <h2 class="section-title">こんなモヤモヤ、ありませんか？</h2>
+    <ul>
+      <li>副業の情報が多すぎて、結局なにも始められていない</li>
+      <li>単発の案件や“その場しのぎ”で、安定する気がしない</li>
+      <li>1人でやっていて、相談できる相手がいない</li>
+      <li>FX・MNP・物販・ポケカ…どれが自分に合うのか判断できない</li>
+    </ul>
+    <p style="margin-top:10px;font-size:0.92rem;">
+      TOMゼロイチラボは、<span class="highlight-blue">「とりあえず色々やる」から卒業して、あなた専用の“増やす仕組み”</span>を一緒に設計する場所です。
+    </p>
+  </section>
+
+  <section id="profile">
+    <h2 class="section-title">ラボ主催者について</h2>
+    <div class="profile-box">
+      <img src="https://tomtradesystem.com/wp-content/uploads/2025/11/RYuアイコン.png?text=TOM" alt="主催者Ryu" class="profile-img">
+      <div class="profile-body">
+        <div class="profile-name">Ryu <span>(ラボ主催者)</span></div>
+        <p class="profile-text">
+          はじめまして、Ryuです。私自身、会社員時代に「副業迷子」で数百万円を自己投資して全て失敗してきました。
+          その経験から、大切なのは「すごいノウハウ」ではなく「自分に合った再現性のある仕組み」だと痛感。
+          <br>このラボでは、私が見つけてきた「堅実な手法」と「仕組み化の型」を共有し、皆さんが遠回りせず「ゼロイチ」を達成するお手伝いをしています。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="benefits">
+    <h2 class="section-title">参加すると得られる3つのこと</h2>
+    <div class="three-columns">
+      <div class="card">
+        <svg class="card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.5-10.5h.5a2.25 2.25 0 012.25 2.25v1.5a2.25 2.25 0 01-2.25 2.25H16.5m-6 0h.5A2.25 2.25 0 0013.25 9V7.5A2.25 2.25 0 0011 5.25H10.5m0 0H9m1.5 0H12m6.5 2.25h.5a2.25 2.25 0 012.25 2.25v1.5a2.25 2.25 0 01-2.25 2.25H18.5m-6 0h.5a2.25 2.25 0 002.25-2.25V7.5a2.25 2.25 0 00-2.25-2.25H12.5m0 0H11m1.5 0H14m5.5 2.25h.5a2.25 2.25 0 012.25 2.25v1.5a2.25 2.25 0 01-2.25 2.25H20.5m-6 0h.5a2.25 2.25 0 002.25-2.25V7.5a2.25 2.25 0 00-2.25-2.25H15m1.5 0H14m1.5 0H17m-6.5 2.25h.5a2.25 2.25 0 012.25 2.25v1.5a2.25 2.25 0 01-2.25 2.25H10.5m-6 0h.5a2.25 2.25 0 002.25-2.25V7.5A2.25 2.25 0 005 5.25H4.5m0 0H3m1.5 0H6" />
+        </svg>
+        <div class="card-title">① 自分に合った“攻め方”が分かる</div>
+        <p>
+          FX・MNP・物販・ポケカなど、複数の選択肢から<br>
+          あなたの資金・性格・時間に合うルートを一緒に設計します。
+        </p>
+      </div>
+      <div class="card">
+        <svg class="card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423L16.5 15.75l.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+        </svg>
+        <div class="card-title">② 手を動かしやすい“型”が手に入る</div>
+        <p>
+          チェックリストやスプレッドシート、投稿テンプレなど、<br>
+          <span class="highlight-blue">「見本を真似すれば回せる」</span>状態まで落とし込みます。
+        </p>
+      </div>
+      <div class="card">
+        <svg class="card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 00-12.128 0M12 11.25a4.125 4.125 0 100-8.25 4.125 4.125 0 000 8.25zM12 15a9.094 9.094 0 018.132 5.25H3.868A9.094 9.094 0 0112 15z" />
+        </svg>
+        <div class="card-title">③ 1人で迷わない環境ができる</div>
+        <p>
+          実践者同士で進捗共有・相談・改善。<br>
+          ゆるく、でもちゃんと続けられる環境を用意しています。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contents">
+    <h2 class="section-title">ラボで扱う主なコンテンツ</h2>
+    <p style="font-size:0.9rem;margin-bottom:12px;">
+      すべてをやる必要はありません。あなたに合うものを一緒に選びます。
+    </p>
+    <div class="content-grid">
+      
+      <div class="content-card">
+        <svg class="content-card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-3v3m3-3v3m3-3v3m-9.75 1.5a1.5 1.5 0 01-3 0V7.5a1.5 1.5 0 011.5-1.5h1.5v-1.5a1.5 1.5 0 011.5-1.5h3a1.5 1.5 0 011.5 1.5v1.5h1.5a1.5 1.5 0 011.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5h-3a1.5 1.5 0 01-1.5-1.5v-1.5H15a1.5 1.5 0 01-1.5-1.5v-3.75a.75.75 0 00-.75-.75h-.75a.75.75 0 00-.75.75v3.75a1.5 1.5 0 01-1.5 1.5h-1.5z" />
+        </svg>
+        <div class="content-card-body">
+          <div class="content-card-title">FX × ツール運用</div>
+          <p class="content-card-text">
+            アービトラージ、ゴトー日など。リスク管理・資金管理・ツールの使い方をセットで解説。
+          </p>
+        </div>
+      </div>
+      
+      <div class="content-card">
+        <svg class="content-card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75A2.25 2.25 0 0015.75 1.5h-2.25m-3.75 0h3.75M12 18.75v.008" />
+        </svg>
+        <div class="content-card-body">
+          <div class="content-card-title">MNP・通信系の副業サポート</div>
+          <p class="content-card-text">
+            案件の見方、注意点、数字管理シート。初心者がつまずくポイントを事例ベースで共有。
+          </p>
+        </div>
+      </div>
+      
+      <div class="content-card">
+        <svg class="content-card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10.5 11.25h3M12 15V7.5" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 7.5H20.25M16.5 7.5V5.25A2.25 2.25 0 0014.25 3H9.75A2.25 2.25 0 007.5 5.25V7.5" />
+        </svg>
+        <div class="content-card-body">
+          <div class="content-card-title">物販・ポケカ・その他案件</div>
+          <p class="content-card-text">
+            ポケカ素体・PSA・転売リサーチ＆管理。利益計算ツールやチェックリストで「感覚」から卒業。
+          </p>
+        </div>
+      </div>
+      
+      <div class="content-card">
+        <svg class="content-card-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.183m0 0h-4.992m4.992 0v4.992" />
+        </svg>
+        <div class="content-card-body">
+          <div class="content-card-title">仕組み化・情報発信・LTV設計</div>
+          <p class="content-card-text">
+            小さな実績をどう“資産”に変えるか。ノウハウをコンテンツ化して、継続的な収入につなげます。
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="steps">
+    <h2 class="section-title">参加〜実践までのイメージ</h2>
+    <div class="steps">
+      <div class="step-item">
+        <div class="highlight">LINEで登録</div>
+        <p>無料オープンチャット or 案内用LINEから登録。</p>
+      </div>
+      <div class="step-item">
+        <div class="highlight">ガイダンスで現在地チェック</div>
+        <p>今の収入・時間・リスク許容度をざっくりヒアリングし、「どのルートが合うか？」を一緒に仮決めします。</p>
+      </div>
+      <div class="step-item">
+        <div class="highlight">小さく始めるテーマを決める</div>
+        <p>FX / MNP / 物販 / ポケカ…から、まず1つに絞ってスタート。</p>
+      </div>
+      <div class="step-item">
+        <div class="highlight">テンプレ＋ツールで実践</div>
+        <p>用意されたシート・テンプレ・ツールをそのまま使って、「まず1案件・1ロット・1取引」を完了させます。</p>
+      </div>
+      <div class="step-item">
+        <div class="highlight">数字を見ながら改善＆仕組み化</div>
+        <p>結果を数字で振り返り、続ける／拡大する／別の柱を増やす、を一緒に判断していきます。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="voice">
+    <h2 class="section-title">参加者の声</h2>
+    <div class="voice-grid">
+      <div class="voice-card">
+        <div class="voice-header">
+          <img src="https://via.placeholder.com/100x100.png?text=Aさん" alt="Aさん" class="voice-img">
+          <div class="voice-name">A.Tさん <span>(30代・会社員)</span></div>
+        </div>
+        <p class="voice-text">
+          情報が多すぎて迷子でしたが、TOMさんのガイダンスでMNPから挑戦。管理シートのおかげで、初月で無事に3万円の利益を出せました。今はFXツールも併用し、安定して月5万円を超えています。
+        </p>
+      </div>
+      <div class="voice-card">
+        <div class="voice-header">
+          <img src="https://via.placeholder.com/100x100.png?text=Bさん" alt="Bさん" class="voice-img">
+          <div class="voice-name">B.Kさん <span>(20代・フリーランス)</span></div>
+        </div>
+        <p class="voice-text">
+          ポケカ転売を自己流でやって赤字でした。ラボで利益計算やリサーチの「型」を学び、やっと黒字化。分からないことをDiscordですぐ聞ける環境が本当にありがたいです。
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="who">
+    <h2 class="section-title">こんな人におすすめです</h2>
+    <ul>
+      <li>会社員のまま、もう1本の収入の柱を育てたい</li>
+      <li>やる気はあるのに、何から手をつければいいか分からない</li>
+      <li>副業でちょっと稼いだことはあるが、安定感がない</li>
+      <li>1人で情報を集めるのに疲れて、仕組み化できる仲間がほしい</li>
+    </ul>
+  </section>
+
+  <section id="plan">
+    <h2 class="section-title">参加プラン</h2>
+    <div class="plan-list">
+      <div class="plan-card recommended">
+        <div class="plan-name">スタンダードプラン</div>
+        <div class="plan-price">月額 2,980円 <span>（税込）</span></div>
+        <ul>
+          <li>コミュニティ参加（Discord / オプチャなど）</li>
+          <li>副業ロードマップ閲覧</li>
+          <li>各種テンプレート・シートの利用</li>
+          <li>月1回の案件共有会</li>
+        </ul>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">アドバンスドプラン</div>
+        <div class="plan-price">準備中</div>
+        <ul>
+          <li>スタンダードプランの全内容</li>
+          <li>FXツール運用レクチャー</li>
+          <li>個別の数字・案件に対するフィードバック</li>
+          <li>仕組み化・発信の相談s</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2 class="section-title">よくある質問</h2>
+    
+    <details class="faq-item">
+      <summary class="faq-q">副業未経験でもついていけますか？</summary>
+      <div class="faq-a">
+        大丈夫です。最初に「今どこにいるか」を一緒に確認して、いきなり難しい案件を押しつけることはありません。小さく始めて、少しずつステップアップしていく設計です。
+      </div>
+    </details>
+    
+    <details class="faq-item">
+      <summary class="faq-q">どのくらい時間が必要ですか？</summary>
+      <div class="faq-a">
+        週に3〜5時間ほどを目安にしています。まとまった時間が取れない方でも、「やることが明確なタスク」に分解して進められるようにしています。
+      </div>
+    </details>
+    
+    <details class="faq-item">
+      <summary class="faq-q">ツールや案件に強制参加させられたりしませんか？</summary>
+      <div class="faq-a">
+        強制はありません。メリット・デメリット、リスクをセットで共有した上で、本人が納得できるものだけ選んでもらうスタイルです。
+      </div>
+    </details>
+
+  </section>
+
+  <section class="footer-cta" id="cta-bottom">
+    <div class="footer-copy-main">
+      情報を追いかけるだけの副業から、<br>“増え続ける仕組み”を持つ人へ。
+    </div>
+    <div class="footer-copy-sub">
+      TOMゼロイチラボで、あなたの「最初の一歩」と、その先の「仕組みづくり」までを一緒にデザインします。
+    </div>
+
+    <div class="btn-area">
+      <a href="https://example.com/line" class="btn-primary" target="_blank" rel="noopener">無料オープンチャットに参加する</a>
+      <a href="https://example.com/line" class="btn-outline" target="_blank" rel="noopener">ラボの案内をLINEで受け取る</a>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
